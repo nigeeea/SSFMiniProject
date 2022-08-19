@@ -5,8 +5,49 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
+
+    <h1>
+        <br>
+        <img src="images/FoodFinderLogo1.png">
+    </h1>
+    <br>
 <body>
-    <h1>Welcome to the home page</h1>
+    <form action="/displayrecipe" method="GET">
+        <label for="cuisine"> Choose a Cuisine:</label>
+            <select name="userInput" id="cuisine">
+                <option value="" disabled selected>Select your Cuisine!</option>
+                <option value="African">African</option>
+                <option value="American">American</option>
+                <option value="British">British</option>
+                <option value="Cajun">Cajun</option>
+                <option value="Carribean">Carribean</option>
+                <option value="Chinese">Chinese</option>
+                <option value="Eastern European">Eastern European</option>
+                <option value="European">European</option>
+                <option value="French">French</option>
+                <option value="German">German</option>
+                <option value="Greek">Greek</option>
+                <option value="Indian">Indian</option>
+                <option value="Irish">Irish</option>
+                <option value="Italian">Italian</option>
+                <option value="Japanese">Japanese</option>
+                <option value="Jewish">Jewish</option>
+                <option value="Korean">Korean</option>
+                <option value="Latin American">Latin American</option>
+                <option value="Mediterranean">Mediterranean</option>
+                <option value="Mexican">Mexican</option>
+                <option value="Middle Eastern">Middle Eastern</option>
+                <option value="Nordic">Nordic</option>
+                <option value="Southern">Southern</option>
+                <option value="Spanish">Spanish</option>
+                <option value="Thai">Thai</option>
+                <option value="Vietnamese">Vietnamese</option>
+            </select>
+        <input type="submit" value="Find It!">
+    </form>
+
+    <h2>Pick a cuisine and we'll get you a recipe!</h2>
 </body>
 </html>
