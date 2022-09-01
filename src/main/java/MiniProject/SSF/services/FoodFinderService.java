@@ -37,7 +37,7 @@ public class FoodFinderService {
 
     //Method 1: return a list of object(food) - takes in a String "tag" e.g. chicken, fish, chocolate, vegetarian
 
-    public List<Food> getFood(String input, String maxCalInput){
+    public Food getFood(String input, String maxCalInput){
 
         String url = UriComponentsBuilder.fromUriString(URL)
         .queryParam("cuisine", input)
@@ -81,20 +81,36 @@ public class FoodFinderService {
         //take values from myJsonObject and add them to a Food object then add the Food object to a list
         Food myFood = new Food();
         myFood = myFood.fromJSONToFood(myJsonObject);
-        //myFood.setRecipeName(myJsonObject.getString("recipeName"));
+        
         List<Food> myFoodList = new ArrayList<>();
         myFoodList.add(myFood);
 
         System.out.println(">>>>>>>>>>>>>>"+myJsonObject.getString("recipeName")+">>>>>>>>>>>>>>");
 
-        return myFoodList;
+        return myFood;
     }
 
+    //this method saves AND retrieves data to and from Redis
     public String savingIt(String cuisine, String recipeNamez){
         String something = foodRepo.saveIt(cuisine, recipeNamez);
 
         return something;
         
+    }
+
+    //this method saves USERS
+    public String savingUsers(String username, String password){
+        username = username + "acct";
+        String something = foodRepo.saveIt(username, password);
+
+        return something;
+        
+    }
+
+    //this method to retrieve from Redis using Key
+    public String retrieveValue(String key){
+        String value = foodRepo.retrieveIt(key);
+        return value;
     }
 
 }

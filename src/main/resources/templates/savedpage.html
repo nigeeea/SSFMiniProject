@@ -8,5 +8,15 @@
 </head>
 <body>
     <h1>Your recipe has been saved</h1>
+    <br>
+    <h2>Hello <span data-th-text="${username}"></span></h2>
+    <br>
+    <h1>id saved <span data-th-text="${id}"></span></h1>
+    <h1>recipename saved <span data-th-text="${recipename}"></span></h1>
+    <h1>image saved <span data-th-text="${image}"></span></h1>
+    <form action="/searchrecipe">
+        <input type="text" name="username" data-th-value="${username}">
+        <input type="submit" value="search again">
+    </form>
 </body>
 </html>

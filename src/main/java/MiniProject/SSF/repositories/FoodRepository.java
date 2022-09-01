@@ -1,9 +1,6 @@
 package MiniProject.SSF.repositories;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Repository;
@@ -15,6 +12,7 @@ public class FoodRepository {
     //@Qualifier("redislab")
     private RedisTemplate<String,Object> redisTemplate;
 
+    //this method saves AND retrieves data from Redis
     public String saveIt(String cuisine, String recipeName){
 
         ValueOperations<String, Object> ops = redisTemplate.opsForValue();
@@ -24,5 +22,24 @@ public class FoodRepository {
         Object zzz = ops2.get(cuisine);
 
         return zzz.toString();
+    }
+
+    //one more method here to retrieve only
+    public String retrieveIt(String key){
+        ValueOperations<String,Object> ops = redisTemplate.opsForValue();
+        String valueRetrieved = "";
+        if(null == ops.get(key)){
+            valueRetrieved = "nothing";
+        }
+        else{
+            valueRetrieved = ops.get(key).toString();
+        }
+        return valueRetrieved;
+    }
+
+    //one more method to save only
+    public void justSavingIt(String key, String value){
+        ValueOperations<String,Object> ops = redisTemplate.opsForValue();
+        ops.set(key, value);
     }
 }
