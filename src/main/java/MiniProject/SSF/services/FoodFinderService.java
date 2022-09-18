@@ -42,9 +42,11 @@ public class FoodFinderService {
         String url = UriComponentsBuilder.fromUriString(URL)
         .queryParam("cuisine", input)
         .queryParam("number", "10") //hardset to 10 due to API call limitss...
-        .queryParam("intolerances", "Shellfish")
+        //.queryParam("intolerances", "Shellfish")
         .queryParam("maxCalories", maxCalInput)
         .queryParam("apiKey", key)
+        .queryParam("instructionsRequired", "true")
+        .queryParam("addRecipeInformation", "true")
         .toUriString();
 
         //create the GET Request
@@ -66,16 +68,27 @@ public class FoodFinderService {
         JsonObject initialJsonObject = myJsonReader.readObject();
         JsonArray initialJsonArray = initialJsonObject.getJsonArray("results");
 
-        
+       
+
         //this method is to get a random recipe out of the results returned (can get from the size of the JSON Array)
         int randomNumber = (int)(Math.random() * initialJsonArray.size() + 1);
+
+        //get the recipe calories
+        JsonObject initialJsonCaloriesObject = initialJsonArray.getJsonObject(randomNumber).getJsonObject("nutrition");
+        Integer recipeCalories = initialJsonCaloriesObject.getJsonArray("nutrients").getJsonObject(0).getInt("amount");
+        
+
 
         //create a new JsonObject to contain the information that i want
         JsonObjectBuilder myJsonObjectBuilder = Json.createObjectBuilder();
         myJsonObjectBuilder
         .add("id", initialJsonArray.getJsonObject(randomNumber).getInt("id"))
         .add("image", initialJsonArray.getJsonObject(randomNumber).getString("image"))
-        .add("recipeName", initialJsonArray.getJsonObject(randomNumber).getString("title"));
+        .add("recipeName", initialJsonArray.getJsonObject(randomNumber).getString("title"))
+        .add("url", initialJsonArray.getJsonObject(randomNumber).getString("spoonacularSourceUrl"))
+        
+        .add("calories", recipeCalories);
+        
         JsonObject myJsonObject = myJsonObjectBuilder.build();
 
         //take values from myJsonObject and add them to a Food object then add the Food object to a list
@@ -111,6 +124,19 @@ public class FoodFinderService {
     public String retrieveValue(String key){
         String value = foodRepo.retrieveIt(key);
         return value;
+    }
+
+
+    //method from Json to food
+    public Food JsontoFoodObject(JsonObject recipe){
+        Food newFood = new Food();
+        newFood.setCalories(recipe.getInt("calories"));
+        newFood.setId(recipe.getInt("id"));
+        newFood.setImage(recipe.getString("image"));
+        newFood.setRecipeName(recipe.getString("recipename"));
+        newFood.setUrl(recipe.getString("url"));
+
+        return newFood;
     }
 
 }

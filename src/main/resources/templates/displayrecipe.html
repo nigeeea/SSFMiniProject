@@ -29,6 +29,14 @@
         <tr>
             <td>Image: <img th:src="${item.image}" alt=""></td>
         </tr>
+
+        <tr>
+            <td>Recipe URL: <span th:text="${item.url}"></span></td>
+        </tr>
+
+        <tr>
+            <td>Recipe Calories: <span th:text="${item.calories}"></span></td>
+        </tr>
     </table>
     
     <br>
@@ -39,6 +47,8 @@
             <input type="text" name="id" data-th-value="${hiddenid}">
             <input type="text" name="recipename" data-th-value="${hiddenrecipename}">
             <input type="text" name="image" data-th-value="${hiddenimage}">
+            <input type="text" name="calories" data-th-value="${hiddencalories}">
+            <input type="text" name="url" data-th-value="${hiddenurl}">
 
             <input type="text" name="username" data-th-value="${username}">
             

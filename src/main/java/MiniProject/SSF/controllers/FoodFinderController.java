@@ -1,5 +1,7 @@
 package MiniProject.SSF.controllers;
 
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import MiniProject.SSF.models.Food;
+import MiniProject.SSF.repositories.FoodRepository;
 import MiniProject.SSF.services.FoodFinderService;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
+import jakarta.json.JsonReader;
 
 
 @Controller
@@ -27,6 +31,8 @@ public class FoodFinderController {
 
     @Autowired
     private FoodFinderService ffSvc;
+
+    @Autowired FoodRepository foodRepo;
 
 
     //might want to edit this part to ensure the path name
@@ -74,6 +80,8 @@ public class FoodFinderController {
         model.addAttribute("hiddenid",myFood.getId());
         model.addAttribute("hiddenrecipename",myFood.getRecipeName());
         model.addAttribute("hiddenimage",myFood.getImage());
+        model.addAttribute("hiddencalories",myFood.getCalories());
+        model.addAttribute("hiddenurl",myFood.getUrl());
         
         return "displayrecipe";
 
@@ -85,21 +93,68 @@ public class FoodFinderController {
         @RequestParam(name = "id") Integer id,
         @RequestParam(name = "recipename") String recipename,
         @RequestParam(name = "image") String image,
+        @RequestParam(name = "url") String url,
+        @RequestParam(name = "calories") Integer calories,
         // @RequestParam(name = "foodListz") List<Food> foodlist,
         Model model
     )
     {   
-        //create a food jsonarray and store it in redis
-        JsonArrayBuilder myJsonArrayBuilder = Json.createArrayBuilder();
-        JsonObjectBuilder jsonOB1 = Json.createObjectBuilder().add("recipename", recipename);
-        JsonObjectBuilder jsonOB2 = Json.createObjectBuilder().add("id", id);
-        JsonObjectBuilder jsonOB3 = Json.createObjectBuilder().add("image", image);
-        JsonObject jsonObject1 = jsonOB1.build();
-        JsonObject jsonObject2 = jsonOB2.build();
-        JsonObject jsonObject3 = jsonOB3.build();
-        JsonArray finalJsonArray = myJsonArrayBuilder.add(jsonObject1).add(jsonObject2).add(jsonObject3).build();
 
+    //if jsonarray for saved recipes has not been created and is null
+        if(foodRepo.retrieveIt(username).equals("nothing")){
+
+            //create a food jsonarray and store it in redis
+        JsonArrayBuilder myJsonArrayBuilder = Json.createArrayBuilder();
+        JsonObjectBuilder jsonOB1 = Json.createObjectBuilder()
+        .add("recipename", recipename)
+        .add("id", id)
+        .add("image", image)
+        .add("calories", calories)
+        .add("url", url);
+        // JsonObjectBuilder jsonOB2 = Json.createObjectBuilder().add("id", id);
+        // JsonObjectBuilder jsonOB3 = Json.createObjectBuilder().add("image", image);
+        JsonObject jsonObject1 = jsonOB1.build();
+        // JsonObject jsonObject2 = jsonOB2.build();
+        // JsonObject jsonObject3 = jsonOB3.build();
+        JsonArray finalJsonArray = myJsonArrayBuilder.add(jsonObject1).build();
+        //.add(jsonObject2).add(jsonObject3).build()
         ffSvc.savingIt(username, finalJsonArray.toString());
+        }
+
+    //else if created already, add on to the array
+        else{
+
+            //retrieve the already saved recipes
+            String prevSavedRecipes = foodRepo.retrieveIt(username);
+
+            //create the recipe to be saved in json object format and save to string
+            JsonObjectBuilder jsonOB1 = Json.createObjectBuilder()
+            .add("recipename", recipename)
+            .add("id", id)
+            .add("image", image)
+            .add("calories", calories)
+            .add("url", url);
+
+            JsonObject jsonObject1 = jsonOB1.build();
+
+            //Turn the saved json array into an array and add the new json object into the array and save it
+            Reader myStringReader = new StringReader(prevSavedRecipes);
+            JsonReader myJsonReader = Json.createReader(myStringReader);
+            JsonArray prevSavedJsonArray = myJsonReader.readArray();
+
+            JsonArrayBuilder finalJsonArrayBuilder = Json.createArrayBuilder();
+
+            for(int i=0; i<prevSavedJsonArray.size(); i++){
+                finalJsonArrayBuilder.add(prevSavedJsonArray.get(i));
+            }
+
+            
+
+            String finalJsonArrayToSave = finalJsonArrayBuilder.add(jsonObject1).build().toString();  
+            //String finalJsonToSave = prevSavedRecipes + "," + jsonObject1.toString();
+
+            foodRepo.justSavingIt(username, finalJsonArrayToSave);
+        }
 
 
 
@@ -177,6 +232,38 @@ public class FoodFinderController {
         Model model)
         {
             model.addAttribute("username", username);
+
+            //retrieve the string from redis for all the saved recipes
+            String savedRecipes = foodRepo.retrieveIt(username);
+
+            //convert the string to an array
+
+            //Turn the saved json array into an array and add the new json object into the array and save it
+            Reader myStringReader = new StringReader(savedRecipes);
+            JsonReader myJsonReader = Json.createReader(myStringReader);
+            JsonArray prevSavedJsonArray = myJsonReader.readArray();
+
+            JsonArrayBuilder finalJsonArrayBuilder = Json.createArrayBuilder();
+
+            for(int i=0; i<prevSavedJsonArray.size(); i++){
+                finalJsonArrayBuilder.add(prevSavedJsonArray.get(i));
+            }
+
+            JsonArray savedRecipesArray = finalJsonArrayBuilder.build();
+
+            //convert each object int the array into a food object and add it to a "Food" list
+            List<Food> foodlist = new ArrayList<>();
+            
+            for(int i=0; i<savedRecipesArray.size(); i++){
+                JsonObject recipeObject = savedRecipesArray.getJsonObject(i);
+                foodlist.add(ffSvc.JsontoFoodObject(recipeObject));
+                
+            }
+
+            model.addAttribute("foodlist", foodlist);
+
+            //display all saved objects through thymelead iteration
+
             return "savedrecipes";
         }
 

@@ -9,5 +9,34 @@
 <body>
     <h1>Hello <span data-th-text="${username}"></span></h1>
     <h2>Your saved recipes</h2>
+
+    <table data-th-each="food: ${foodlist}">
+        <tr>
+            <td>The ID: </td>
+            <td data-th-text="${food.id}"></td>
+        </tr>
+
+        <tr>
+            <td>The URL: </td>
+            <td ><a th:href="@{food.url}">Click</a></td>
+        </tr>
+
+        <tr>
+            <td>The Image: </td>
+            <td><img data-th-src="${food.image}"></td>
+        </tr>
+
+        <tr>
+            <td>The Calories: </td>
+            <td data-th-text="${food.calories}"></td>
+        </tr>
+
+        <tr>
+            <td>The Recipe Name: </td>
+            <td data-th-text="${food.recipeName}"></td>
+        </tr>
+
+        <br>
+    </table>
 </body>
 </html>

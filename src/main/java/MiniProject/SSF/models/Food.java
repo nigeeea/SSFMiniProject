@@ -13,7 +13,29 @@ public class Food {
 
     private String image;
 
+    private String url;
+
+    private Integer calories;
+
     //getters and setters
+
+
+    public Integer getCalories() {
+        return this.calories;
+    }
+
+    public void setCalories(Integer calories) {
+        this.calories = calories;
+    }
+
+
+    public String getUrl() {
+        return this.url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
 
     public Integer getId() {
@@ -60,6 +82,8 @@ public class Food {
         myFood.setRecipeName(foodJSON.getString("recipeName"));
         myFood.setImage(foodJSON.getString("image"));
         myFood.setId(foodJSON.getInt("id"));
+        myFood.setUrl(foodJSON.getString("url"));
+        myFood.setCalories(foodJSON.getInt("calories"));
         return myFood;
     }
 
