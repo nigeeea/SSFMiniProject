@@ -5,13 +5,55 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+    .bg-1 { 
+  background-color: black;
+  color: grey;
+  font-size: large;
+  font-family:Georgia, 'Times New Roman', Times, serif;
+  border-radius: 50%;
+}
+.bg-2 { 
+  background-color: #3b3f46;
+  color: blue;
+  border-radius: 50%;
+}
+
+.bg-4 { 
+  background-color: #3b3f46;
+  color: grey;
+}
+.container-fluid {
+  padding-top: 70px;
+  padding-bottom: 70px;
+}
+  </style>
 </head>
 <body>
-    <h1>Welcome to the sign up page</h1>
+  <div class="container-fluid bg-4 text-center">
+    <div class="container-fluid bg-1 text-center">
+    <img src="images/FFFFlogo3.png" alt="" height="100">
+    <br>
+    <!-- <h1>Welcome to the sign-up page</h1> -->
+    <br>
     <form action="/signupsuccesspage" method="POST">
-        <input type="text" placeholder="username" name="username">
-        <input type="text" placeholder="password" name="password">
-        <input type="submit" value="sign up">
-    </form>
-</body>
+      <input type="text" placeholder="username" name="username">
+      <input type="password" placeholder="password" name="password">
+      <input type="submit" value="sign up" class="btn btn-default btn-sm">
+  </form>
+    <br>
+    <div>
+        <img src="images/pic9.jpg" alt="" class="container-fluid bg-2 text-center" height="600">
+    </div>
+    <br>
+    <form action="/loginpage" method="GET">
+      <input type="submit" value="login." class="btn btn-default btn-lg">
+  </form>
+  <p>already have an account?</p>
+    </div>
+  </div>
+</body> 
 </html>

@@ -5,38 +5,73 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+      .bg-1 { 
+    background-color: #242526;
+    /* #242526 */
+    color: white;
+    font-size: large;
+    font-family:serif ,Georgia, 'Times New Roman', Times;
+  }
+  .bg-2 { 
+    background-color: #242526;
+    color: blue;
+  }
+  .bg-3 { 
+    background-color: #000000;
+    color: whitesmoke;
+    
+  }
+  img {
+  opacity: 2;
+  width: "500";
+  height: "300";
+  
+}
+  .container-fluid {
+    padding-top: 70px;
+    padding-bottom: 70px;
+  }
+    </style>
 </head>
+
 <body>
+    <div class="container-fluid bg-1 text-center" >
     <h1>Hello <span data-th-text="${username}"></span></h1>
     <h2>Your saved recipes</h2>
+    </div>
+    <table data-th-each="food: ${foodlist}" class="table table-striped">
+        <tr>
+            <td></td>
+            <td><img data-th-src="${food.image}"></td>
+        </tr>
+        
+        <tr>
+            <td>Recipe Name: </td>
+            <td data-th-text="${food.recipeName}"></td>
+        </tr>
 
-    <table data-th-each="food: ${foodlist}">
+        <tr>
+            <td>The URL(Full Recipe): </td>
+            <td ><a data-th-href="${food.url}">Click</a></td>
+        </tr>
+
+        <tr>
+            <td>Calories: </td>
+            <td data-th-text="${food.calories}"></td>
+        </tr>
+        
         <tr>
             <td>The ID: </td>
             <td data-th-text="${food.id}"></td>
         </tr>
 
-        <tr>
-            <td>The URL: </td>
-            <td ><a th:href="@{food.url}">Click</a></td>
-        </tr>
-
-        <tr>
-            <td>The Image: </td>
-            <td><img data-th-src="${food.image}"></td>
-        </tr>
-
-        <tr>
-            <td>The Calories: </td>
-            <td data-th-text="${food.calories}"></td>
-        </tr>
-
-        <tr>
-            <td>The Recipe Name: </td>
-            <td data-th-text="${food.recipeName}"></td>
-        </tr>
-
         <br>
     </table>
+
+
 </body>
 </html>

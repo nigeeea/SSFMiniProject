@@ -111,13 +111,8 @@ public class FoodFinderController {
         .add("image", image)
         .add("calories", calories)
         .add("url", url);
-        // JsonObjectBuilder jsonOB2 = Json.createObjectBuilder().add("id", id);
-        // JsonObjectBuilder jsonOB3 = Json.createObjectBuilder().add("image", image);
         JsonObject jsonObject1 = jsonOB1.build();
-        // JsonObject jsonObject2 = jsonOB2.build();
-        // JsonObject jsonObject3 = jsonOB3.build();
         JsonArray finalJsonArray = myJsonArrayBuilder.add(jsonObject1).build();
-        //.add(jsonObject2).add(jsonObject3).build()
         ffSvc.savingIt(username, finalJsonArray.toString());
         }
 
@@ -156,38 +151,11 @@ public class FoodFinderController {
             foodRepo.justSavingIt(username, finalJsonArrayToSave);
         }
 
-
-
-
         model.addAttribute("id",id);
         model.addAttribute("recipename",recipename);
         model.addAttribute("image",image);
-        // for(Food f: foodlist){
-
-        //         JsonObjectBuilder myJsonObjectBuilder1 = Json.createObjectBuilder();
-        //         JsonObject myJsonObject1 = myJsonObjectBuilder1.add("id", f.getId()).build();
-        //         myArrayBuilder.add(myJsonObject1);
-
-        //         JsonObjectBuilder myJsonObjectBuilder2 = Json.createObjectBuilder();
-        //         JsonObject myJsonObject2 = myJsonObjectBuilder2.add("id", f.getId()).build();
-        //         myArrayBuilder.add(myJsonObject2);
-
-        //         JsonObjectBuilder myJsonObjectBuilder3 = Json.createObjectBuilder();
-        //         JsonObject myJsonObject3 = myJsonObjectBuilder3.add("id", f.getId()).build();
-        //         myArrayBuilder.add(myJsonObject3);
-
-        //         JsonObjectBuilder myJsonObjectBuilder4 = Json.createObjectBuilder();
-        //         JsonObject myJsonObject4 = myJsonObjectBuilder4.add("id", f.getId()).build();
-        //         myArrayBuilder.add(myJsonObject4);
-        // }
-        // JsonArray myJsonArray = myArrayBuilder.build();
-
-        // ffSvc.savingIt(username, myJsonArray.toString());
-
-
         model.addAttribute("username", username);
-        //request the object as a parameter
-        //method to save the recipe from foodservice class
+
         return "savedpage";
     }
 
@@ -197,11 +165,6 @@ public class FoodFinderController {
         Model model
     )
     {
-
-        //add a method here to check if the account exists in the redis database in case people try to cheat by editing the
-        // the html page or the query parameter
-        //if (!ffSvc.retrieveIt(username+"acct").equals(password)){return create an account view html page}
-
         model.addAttribute("username", username);
         return "searchrecipe";
     }
@@ -219,11 +182,9 @@ public class FoodFinderController {
         Model model
     ){
         ffSvc.savingUsers(usernameInput, passwordInput);
-
         model.addAttribute("username", usernameInput);
 
         return "signupsuccesspage";
-
     }
 
     @GetMapping(path = "/savedrecipes")
@@ -233,10 +194,13 @@ public class FoodFinderController {
         {
             model.addAttribute("username", username);
 
-            //retrieve the string from redis for all the saved recipes
-            String savedRecipes = foodRepo.retrieveIt(username);
+            if(foodRepo.retrieveIt(username).equals("nothing")){
+                return "emptysavedrecipes";
+            }
 
-            //convert the string to an array
+            else {
+
+            String savedRecipes = foodRepo.retrieveIt(username);
 
             //Turn the saved json array into an array and add the new json object into the array and save it
             Reader myStringReader = new StringReader(savedRecipes);
@@ -262,9 +226,10 @@ public class FoodFinderController {
 
             model.addAttribute("foodlist", foodlist);
 
-            //display all saved objects through thymelead iteration
+            //display all saved objects in html through thymeleaf iteration
 
             return "savedrecipes";
         }
+    }
 
 }

@@ -5,17 +5,48 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+      .bg-1 { 
+    background-color: #242526;
+    /* #242526 */
+    color: darkgray;
+    font-size: large;
+    font-family:serif ,Georgia, 'Times New Roman', Times;
+  }
+  .bg-2 { 
+    background-color: #242526;
+    color: blue;
+  }
+  .bg-3 { 
+    background-color: #000000;
+    color: whitesmoke;
+    
+  }
+  img {
+  opacity: 2;
+  width: "500";
+  height: "300";
+  
+}
+  .container-fluid {
+    padding-top: 70px;
+    padding-bottom: 70px;
+  }
+    </style>
 </head>
-
+<body>
+<div class="container-fluid bg-1 text-center" >
     <h1>Hello <span data-th-text="${username}"></span></h1>
 
     <h1>
         <br>
-        <img src="images/FoodFinderLogo1.png">
+        <img src="images/FFFFLogo3.png" height="100">
     </h1>
     <br>
-<body>
+
     <form action="/displayrecipe" method="GET">
         <label for="cuisine"> Choose a Cuisine:</label>
             <select name="userInput" id="cuisine">
@@ -55,8 +86,10 @@
         <br>
 
         <input type="hidden" name="username" data-th-value="${username}">
+
+        <br>
         
-        <input type="submit" value="Find It!">
+        <input type="submit" value="Find It!" class="btn btn-default btn-lg">
 
         
     </form>
@@ -65,14 +98,15 @@
 
     <br>
     <form action="/savedrecipes" method="GET">
-        <input type="text" data-th-value="${username}" name="username">
-        <input type="submit" value="Go to saved recipes">
+        <input type="hidden" data-th-value="${username}" name="username">
+        <input type="submit" value="Go to saved recipes" class="btn btn-default btn-lg">
     </form>
 
     <br>
     <form action="/" method="GET">
-        <input type="submit" value="logout">
+        <input type="submit" value="logout" class="btn btn-default btn-lg">
     </form>
     <br>
+</div>
 </body>
 </html>

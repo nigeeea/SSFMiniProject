@@ -5,52 +5,65 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+    .bg-1 { 
+  background-color: black;
+  color: grey;
+  font-size: large;
+  font-family:Georgia, 'Times New Roman', Times, serif;
+  border-radius: 40%;
+}
+</style>
 </head>
 <body>
-    <h1>Display Recipe Page</h1>
+    <div class="container-fluid bg-1 text-center">
+    <!-- <h1>Display Recipe Page</h1> -->
     <h2>Hello <span data-th-text="${username}"></span></h2>
-    <h2>This is the cuisine input: <span data-th-text="${inputz}"></span></h2>
-    <h2>This is the Calorie input: <span data-th-text="${maxCalzInput}"></span></h2>
-    <!-- <h2>This is something else i get from Redis: <span data-th-text="${somethingzxc}"></span></h2>
-    <h2>This is something else i get from Redis: <span data-th-text="${onezxc}"></span></h2>
-    <h2>This is a JSON Object i get from Redis: <span data-th-text="${one}"></span></h2> -->
+    <h2>A <span data-th-text="${inputz}"></span> recipe <span data-th-text="${maxCalzInput}"></span> calories or under</h2>
     
     <br>
-
-    <table th:each="item:${thefood}">
+    <div  class="row justify-content-center">
+        <div class="col-auto">
+    <table th:each="item:${thefood}" class="table table-responsive" style="border: 0px transparent;">
         <tr>
-            <td>Recipe Name: <span th:text="${item.recipeName}"></span></td>
+            <td><h2><span th:text="${item.recipeName}"></span></h2></td>
         </tr>
 
         <tr>
-            <td>Recipe ID: <span th:text="${item.id}"></span></td>
+            <td><img th:src="${item.image}" alt=""></td>
         </tr>
 
         <tr>
-            <td>Image: <img th:src="${item.image}" alt=""></td>
-        </tr>
-
-        <tr>
-            <td>Recipe URL: <span th:text="${item.url}"></span></td>
+            <td>Recipe: <a data-th-href="${item.url}">Click Here</span></a></td>
         </tr>
 
         <tr>
             <td>Recipe Calories: <span th:text="${item.calories}"></span></td>
+        </tr>        
+        
+        <tr>
+            <td>Recipe ID: <span th:text="${item.id}"></span></td>
         </tr>
+
     </table>
-    
+    </div>
+    </div>
+
     <br>
 
        <form action="/savedpage" method="POST">
             <h3>Do you want to save this recipe?</h3>
                 
-            <input type="text" name="id" data-th-value="${hiddenid}">
-            <input type="text" name="recipename" data-th-value="${hiddenrecipename}">
-            <input type="text" name="image" data-th-value="${hiddenimage}">
-            <input type="text" name="calories" data-th-value="${hiddencalories}">
-            <input type="text" name="url" data-th-value="${hiddenurl}">
+            <input type="hidden" name="id" data-th-value="${hiddenid}">
+            <input type="hidden" name="recipename" data-th-value="${hiddenrecipename}">
+            <input type="hidden" name="image" data-th-value="${hiddenimage}">
+            <input type="hidden" name="calories" data-th-value="${hiddencalories}">
+            <input type="hidden" name="url" data-th-value="${hiddenurl}">
 
-            <input type="text" name="username" data-th-value="${username}">
+            <input type="hidden" name="username" data-th-value="${username}">
             
             <input type="submit" value="save it!">
         </form> 
@@ -58,9 +71,10 @@
     
     <br>
     <form action="/searchrecipe" method="GET">
-        <input data-th-value="${username}" name="username">
+        <input data-th-value="${username}" name="username" type="hidden">
         <input type="submit" value="Search Again">
     </form>
-    
+    <br>
+    </div>
 </body>
 </html>
