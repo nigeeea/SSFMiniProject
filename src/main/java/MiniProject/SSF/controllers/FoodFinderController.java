@@ -1,9 +1,7 @@
 package MiniProject.SSF.controllers;
 
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.List;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,13 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import MiniProject.SSF.models.Food;
 import MiniProject.SSF.repositories.FoodRepository;
 import MiniProject.SSF.services.FoodFinderService;
-import jakarta.json.Json;
-import jakarta.json.JsonArray;
-import jakarta.json.JsonArrayBuilder;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonObjectBuilder;
-import jakarta.json.JsonReader;
-
 
 @Controller
 
@@ -95,7 +86,6 @@ public class FoodFinderController {
         @RequestParam(name = "image") String image,
         @RequestParam(name = "url") String url,
         @RequestParam(name = "calories") Integer calories,
-        // @RequestParam(name = "foodListz") List<Food> foodlist,
         Model model
     )
     {   
