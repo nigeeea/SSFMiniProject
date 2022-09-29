@@ -5,9 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+
   <style>
       .bg-1 { 
     background-color: #242526;
@@ -32,21 +32,48 @@
   
 }
   .container-fluid {
-    padding-top: 70px;
-    padding-bottom: 70px;
+    padding-top: 10px;
+    padding-bottom: 20px;
   }
     </style>
 </head>
 <body>
-<div class="container-fluid bg-1 text-center" >
-    <h1>Hello <span data-th-text="${username}"></span></h1>
-
-    <h1>
-        <br>
-        <img src="images/FFFFLogo3.png" height="100">
-    </h1>
+  
+<div class="container-fluid bg-1 text-left">
+  <div class="row">
+  <div class="col-md-1">
+    <h1 class="text-left"> <img src="images/FFFFLogo3.png" height="100"></h1>
+  </div>
+  
+  <div class="col-md-8" >
     <br>
+    <h1 class="text-left">Hello <span data-th-text="${username}"></span></h1>
+  </div>
+  <div class="col-md-1"></div>
+  <div class="col-md-1">
+    <br>
+    <br>
+    <form action="/savedrecipes" method="GET">
+      <input type="hidden" data-th-value="${username}" name="username">
+      <input type="submit" value="saved recipes" class="btn btn-secondary btn-sm">
+    </form>
+  </div>
 
+  <div class="col-md-1">
+    <br>
+    <br>
+    <form action="/" method="GET">
+    <input type="submit" value="logout" class="btn btn-secondary btn-sm">
+  </form>
+  </div>
+  </div>
+</div>
+
+<div class="container-fluid bg-1 text-center" style="background-color: lightgray; color:#000000">
+    <br>
+    <img src="images/searchicon.png" alt="" height="300">
+    <br>
+    <br>
     <form action="/displayrecipe" method="GET">
         <label for="cuisine"> Choose a Cuisine:</label>
             <select name="userInput" id="cuisine">
@@ -81,7 +108,7 @@
             
         <br>
             Calorie Input:
-        <input type="number" name="maxCalorieInput" min="1" max="2000">
+        <input type="number" name="maxCalorieInput" min="250" max="2000">
             
         <br>
 
@@ -89,24 +116,25 @@
 
         <br>
         
-        <input type="submit" value="Find It!" class="btn btn-default btn-lg">
+        <input type="submit" value="Find It!" class="btn btn-secondary btn-sm">
 
         
     </form>
-
-    <h2>Pick a cuisine and we'll get you a recipe!</h2>
-
     <br>
-    <form action="/savedrecipes" method="GET">
-        <input type="hidden" data-th-value="${username}" name="username">
-        <input type="submit" value="Go to saved recipes" class="btn btn-default btn-lg">
-    </form>
-
-    <br>
-    <form action="/" method="GET">
-        <input type="submit" value="logout" class="btn btn-default btn-lg">
-    </form>
-    <br>
+    <h3>Pick a cuisine and we'll get you a recipe!</h3>
+  
 </div>
+
+<div class="container-fluid bg-1 h-100" >
+  <br>
+</div>
+
+<footer class="text-center" style="background-color: grey;">
+  <div class="fixed-bottom bg-dark">
+   <p style="color: white;"><a href="https://shielded-inlet-76126.herokuapp.com/" style="color: white;">|FoodFinderInc.com|</a></p> 
+  </div>    
+</footer>
+
+
 </body>
 </html>

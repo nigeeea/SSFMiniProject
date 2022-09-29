@@ -5,9 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
   <style>
       .bg-1 { 
     background-color: #242526;
@@ -18,32 +17,48 @@
   }
   .bg-2 { 
     background-color: #242526;
-    color: blue;
+    padding-top: 5px;
   }
-  .bg-3 { 
-    background-color: #000000;
-    color: whitesmoke;
-    
-  }
-  img {
-  opacity: 2;
-  width: "500";
-  height: "300";
-  
-}
   .container-fluid {
-    padding-top: 70px;
-    padding-bottom: 70px;
+    padding-top: 10px;
+    padding-bottom: 20px;
   }
     </style>
 </head>
 
 <body>
-    <div class="container-fluid bg-1 text-center" >
-    <h1>Hello <span data-th-text="${username}"></span></h1>
-    <h2>Your saved recipes</h2>
-    </div>
-    <table data-th-each="food: ${foodlist}" class="table table-striped">
+  
+    <div class="container-fluid bg-1 text-left">
+      <div class="row">
+      <div class="col-md-1">
+        <h1 class="text-left"> <img src="images/FFFFLogo3.png" height="100"></h1>
+      </div>
+      <div class="col-md-9">
+        <br>
+        <h1><span data-th-text="${username}"></span>'s saved recipes</h1>
+      </div>
+      <div class="col-md-1">
+        <br>
+        <br>
+        <form action="/searchrecipe">
+          <input type="hidden" name="username" data-th-value="${username}">
+          <input type="submit" value="search again" class="btn btn-secondary btn-sm" style="color: whitesmoke;">
+        </form>
+      </div>
+      <div class="col-md-1">
+        <br>
+        <br>
+        <form action="/" method="GET">
+          <input type="submit" value="logout" class="btn btn-secondary btn-sm" style="color: whitesmoke;">
+      </form>
+      </div>
+      
+    </div>    
+    
+
+    <div class="container-fluid bg-2" >
+      
+    <table data-th-each="food: ${foodlist}" class="table table-dark table-striped">
         <tr>
             <td></td>
             <td><img data-th-src="${food.image}"></td>
@@ -56,7 +71,7 @@
 
         <tr>
             <td>The URL(Full Recipe): </td>
-            <td ><a data-th-href="${food.url}">Click</a></td>
+            <td ><a data-th-href="${food.url}" style="color: white;">Click</a></td>
         </tr>
 
         <tr>
@@ -71,7 +86,8 @@
 
         <br>
     </table>
-
+  
+  </div>
 
 </body>
 </html>

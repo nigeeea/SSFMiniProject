@@ -17,6 +17,7 @@ import MiniProject.SSF.models.Food;
 import MiniProject.SSF.repositories.FoodRepository;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
+import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import jakarta.json.JsonReader;
@@ -139,4 +140,91 @@ public class FoodFinderService {
         return newFood;
     }
 
+    //method to save recipes
+    public void saveRecipe(String username, Integer id, String recipeName, String image, String url, Integer calories){
+
+        //if jsonarray for saved recipes has not been created and is null
+        if(foodRepo.retrieveIt(username).equals("nothing")){
+
+            //create a food jsonarray and store it in redis
+        JsonArrayBuilder myJsonArrayBuilder = Json.createArrayBuilder();
+        JsonObjectBuilder jsonOB1 = Json.createObjectBuilder()
+        .add("recipename", recipeName)
+        .add("id", id)
+        .add("image", image)
+        .add("calories", calories)
+        .add("url", url);
+        JsonObject jsonObject1 = jsonOB1.build();
+        JsonArray finalJsonArray = myJsonArrayBuilder.add(jsonObject1).build();
+        savingIt(username, finalJsonArray.toString());
+        }
+
+    //else if created already, add on to the array
+        else{
+
+            //retrieve the already saved recipes
+            String prevSavedRecipes = foodRepo.retrieveIt(username);
+
+            //create the recipe to be saved in json object format and save to string
+            JsonObjectBuilder jsonOB1 = Json.createObjectBuilder()
+            .add("recipename", recipeName)
+            .add("id", id)
+            .add("image", image)
+            .add("calories", calories)
+            .add("url", url);
+
+            JsonObject jsonObject1 = jsonOB1.build();
+
+            //Turn the saved json array into an array and add the new json object into the array and save it
+            Reader myStringReader = new StringReader(prevSavedRecipes);
+            JsonReader myJsonReader = Json.createReader(myStringReader);
+            JsonArray prevSavedJsonArray = myJsonReader.readArray();
+
+            JsonArrayBuilder finalJsonArrayBuilder = Json.createArrayBuilder();
+
+            for(int i=0; i<prevSavedJsonArray.size(); i++){
+                finalJsonArrayBuilder.add(prevSavedJsonArray.get(i));
+            }
+
+            
+
+            String finalJsonArrayToSave = finalJsonArrayBuilder.add(jsonObject1).build().toString();  
+            //String finalJsonToSave = prevSavedRecipes + "," + jsonObject1.toString();
+
+            foodRepo.justSavingIt(username, finalJsonArrayToSave);
+        }
+
+    }
+
+    //method to get saved recipes
+    public ArrayList<Food> getSavedRecipes(String username){
+
+        
+        String savedRecipes = foodRepo.retrieveIt(username);
+
+        //Turn the saved json array into an array and add the new json object into the array and save it
+        Reader myStringReader = new StringReader(savedRecipes);
+        JsonReader myJsonReader = Json.createReader(myStringReader);
+        JsonArray prevSavedJsonArray = myJsonReader.readArray();
+
+        JsonArrayBuilder finalJsonArrayBuilder = Json.createArrayBuilder();
+
+        for(int i=0; i<prevSavedJsonArray.size(); i++){
+            finalJsonArrayBuilder.add(prevSavedJsonArray.get(i));
+        }
+
+        JsonArray savedRecipesArray = finalJsonArrayBuilder.build();
+
+        //convert each object int the array into a food object and add it to a "Food" list
+        ArrayList<Food> foodlist = new ArrayList<>();
+        
+        for(int i=0; i<savedRecipesArray.size(); i++){
+            JsonObject recipeObject = savedRecipesArray.getJsonObject(i);
+            foodlist.add(JsontoFoodObject(recipeObject));
+            
+            
+        }
+
+        return foodlist;
+    }
 }

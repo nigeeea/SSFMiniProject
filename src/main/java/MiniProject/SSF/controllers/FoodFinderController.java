@@ -99,57 +99,57 @@ public class FoodFinderController {
         Model model
     )
     {   
+        ffSvc.saveRecipe(username, id, recipename, image, url, calories);
+    // //if jsonarray for saved recipes has not been created and is null
+    //     if(foodRepo.retrieveIt(username).equals("nothing")){
 
-    //if jsonarray for saved recipes has not been created and is null
-        if(foodRepo.retrieveIt(username).equals("nothing")){
+    //         //create a food jsonarray and store it in redis
+    //     JsonArrayBuilder myJsonArrayBuilder = Json.createArrayBuilder();
+    //     JsonObjectBuilder jsonOB1 = Json.createObjectBuilder()
+    //     .add("recipename", recipename)
+    //     .add("id", id)
+    //     .add("image", image)
+    //     .add("calories", calories)
+    //     .add("url", url);
+    //     JsonObject jsonObject1 = jsonOB1.build();
+    //     JsonArray finalJsonArray = myJsonArrayBuilder.add(jsonObject1).build();
+    //     ffSvc.savingIt(username, finalJsonArray.toString());
+    //     }
 
-            //create a food jsonarray and store it in redis
-        JsonArrayBuilder myJsonArrayBuilder = Json.createArrayBuilder();
-        JsonObjectBuilder jsonOB1 = Json.createObjectBuilder()
-        .add("recipename", recipename)
-        .add("id", id)
-        .add("image", image)
-        .add("calories", calories)
-        .add("url", url);
-        JsonObject jsonObject1 = jsonOB1.build();
-        JsonArray finalJsonArray = myJsonArrayBuilder.add(jsonObject1).build();
-        ffSvc.savingIt(username, finalJsonArray.toString());
-        }
+    // //else if created already, add on to the array
+    //     else{
 
-    //else if created already, add on to the array
-        else{
+    //         //retrieve the already saved recipes
+    //         String prevSavedRecipes = foodRepo.retrieveIt(username);
 
-            //retrieve the already saved recipes
-            String prevSavedRecipes = foodRepo.retrieveIt(username);
+    //         //create the recipe to be saved in json object format and save to string
+    //         JsonObjectBuilder jsonOB1 = Json.createObjectBuilder()
+    //         .add("recipename", recipename)
+    //         .add("id", id)
+    //         .add("image", image)
+    //         .add("calories", calories)
+    //         .add("url", url);
 
-            //create the recipe to be saved in json object format and save to string
-            JsonObjectBuilder jsonOB1 = Json.createObjectBuilder()
-            .add("recipename", recipename)
-            .add("id", id)
-            .add("image", image)
-            .add("calories", calories)
-            .add("url", url);
+    //         JsonObject jsonObject1 = jsonOB1.build();
 
-            JsonObject jsonObject1 = jsonOB1.build();
+    //         //Turn the saved json array into an array and add the new json object into the array and save it
+    //         Reader myStringReader = new StringReader(prevSavedRecipes);
+    //         JsonReader myJsonReader = Json.createReader(myStringReader);
+    //         JsonArray prevSavedJsonArray = myJsonReader.readArray();
 
-            //Turn the saved json array into an array and add the new json object into the array and save it
-            Reader myStringReader = new StringReader(prevSavedRecipes);
-            JsonReader myJsonReader = Json.createReader(myStringReader);
-            JsonArray prevSavedJsonArray = myJsonReader.readArray();
+    //         JsonArrayBuilder finalJsonArrayBuilder = Json.createArrayBuilder();
 
-            JsonArrayBuilder finalJsonArrayBuilder = Json.createArrayBuilder();
-
-            for(int i=0; i<prevSavedJsonArray.size(); i++){
-                finalJsonArrayBuilder.add(prevSavedJsonArray.get(i));
-            }
+    //         for(int i=0; i<prevSavedJsonArray.size(); i++){
+    //             finalJsonArrayBuilder.add(prevSavedJsonArray.get(i));
+    //         }
 
             
 
-            String finalJsonArrayToSave = finalJsonArrayBuilder.add(jsonObject1).build().toString();  
-            //String finalJsonToSave = prevSavedRecipes + "," + jsonObject1.toString();
+    //         String finalJsonArrayToSave = finalJsonArrayBuilder.add(jsonObject1).build().toString();  
+    //         //String finalJsonToSave = prevSavedRecipes + "," + jsonObject1.toString();
 
-            foodRepo.justSavingIt(username, finalJsonArrayToSave);
-        }
+    //         foodRepo.justSavingIt(username, finalJsonArrayToSave);
+    //     }
 
         model.addAttribute("id",id);
         model.addAttribute("recipename",recipename);
@@ -200,29 +200,30 @@ public class FoodFinderController {
 
             else {
 
-            String savedRecipes = foodRepo.retrieveIt(username);
+                ArrayList<Food> foodlist = ffSvc.getSavedRecipes(username);
+            // String savedRecipes = foodRepo.retrieveIt(username);
 
-            //Turn the saved json array into an array and add the new json object into the array and save it
-            Reader myStringReader = new StringReader(savedRecipes);
-            JsonReader myJsonReader = Json.createReader(myStringReader);
-            JsonArray prevSavedJsonArray = myJsonReader.readArray();
+            // //Turn the saved json array into an array and add the new json object into the array and save it
+            // Reader myStringReader = new StringReader(savedRecipes);
+            // JsonReader myJsonReader = Json.createReader(myStringReader);
+            // JsonArray prevSavedJsonArray = myJsonReader.readArray();
 
-            JsonArrayBuilder finalJsonArrayBuilder = Json.createArrayBuilder();
+            // JsonArrayBuilder finalJsonArrayBuilder = Json.createArrayBuilder();
 
-            for(int i=0; i<prevSavedJsonArray.size(); i++){
-                finalJsonArrayBuilder.add(prevSavedJsonArray.get(i));
-            }
+            // for(int i=0; i<prevSavedJsonArray.size(); i++){
+            //     finalJsonArrayBuilder.add(prevSavedJsonArray.get(i));
+            // }
 
-            JsonArray savedRecipesArray = finalJsonArrayBuilder.build();
+            // JsonArray savedRecipesArray = finalJsonArrayBuilder.build();
 
-            //convert each object int the array into a food object and add it to a "Food" list
-            List<Food> foodlist = new ArrayList<>();
+            // //convert each object int the array into a food object and add it to a "Food" list
+            // List<Food> foodlist = new ArrayList<>();
             
-            for(int i=0; i<savedRecipesArray.size(); i++){
-                JsonObject recipeObject = savedRecipesArray.getJsonObject(i);
-                foodlist.add(ffSvc.JsontoFoodObject(recipeObject));
+            // for(int i=0; i<savedRecipesArray.size(); i++){
+            //     JsonObject recipeObject = savedRecipesArray.getJsonObject(i);
+            //     foodlist.add(ffSvc.JsontoFoodObject(recipeObject));
                 
-            }
+            // }
 
             model.addAttribute("foodlist", foodlist);
 

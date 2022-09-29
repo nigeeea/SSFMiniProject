@@ -5,9 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
   <style>
     .bg-1 { 
   background-color: #3b3f46;
@@ -33,7 +32,7 @@
   </style>
 
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
   <div class="container-fluid bg-4 text-center">
     
     <div class="container-fluid bg-1 text-center">
@@ -45,18 +44,29 @@
     <form action="logintest" method="POST">
         <input type="text" placeholder="username" name="username">
         <input type="password" placeholder="password" name="password">
-        <input type="submit" value="login" class="btn btn-default btn-sm">
+        <input type="submit" value="login" class="btn btn-secondary btn-sm">
     </form>
     <br>
     <div>
-        <img src="images/pic11.jpg" alt="" class="container-fluid bg-2 text-center" height="600">
+        <img src="images/pic11.jpg" alt="" height="200" style="border-radius: 50%;">
     </div>
     <br>
-    <form action="/signuppage" method="GET">
-      <input type="submit" value="sign-up." class="btn btn-default btn-lg">
-  </form>
+
     <p>have you signed up?</p>
+    <form action="/signuppage" method="GET">
+      <input type="submit" value="sign-up." class="btn btn-secondary btn-sm">
+    </form>
     </div>
   </div>
+  
+  
+    <footer class="text-center" style="background-color: black; ">
+      <div class="fixed-bottom bg-secondary">
+       <p style="color: white;"><a href="https://shielded-inlet-76126.herokuapp.com/" style="color: white;">|FoodFinderInc.com|</a></p> 
+      </div>    
+    </footer>
+    
+
+  
 </body>
 </html>
