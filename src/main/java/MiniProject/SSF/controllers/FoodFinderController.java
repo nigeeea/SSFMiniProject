@@ -1,5 +1,6 @@
 package MiniProject.SSF.controllers;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.google.common.hash.Hashing;
 
 import MiniProject.SSF.models.Food;
 import MiniProject.SSF.repositories.FoodRepository;
@@ -40,10 +43,9 @@ public class FoodFinderController {
         Model model)
     {   
         
-        if(ffSvc.retrieveValue(username+"acct").equals(password)){
+        if(ffSvc.retrieveValue(username+"acct").equals(Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString())){
             
             model.addAttribute("username", username);
-
             return "searchrecipe";
         }
         else
@@ -165,16 +167,21 @@ public class FoodFinderController {
         return "signuppage";
     }
 
-    @PostMapping(path = "/signupsuccesspage")
+    @PostMapping(path = "/signupresultpage")
     public String displaySignUpSuccessPage(
         @RequestParam(name = "username") String usernameInput,
         @RequestParam(name = "password") String passwordInput,
         Model model
     ){
-        ffSvc.savingUsers(usernameInput, passwordInput);
-        model.addAttribute("username", usernameInput);
-
-        return "signupsuccesspage";
+        if(foodRepo.retrieveIt(usernameInput)!="nothing"){
+            return "signupfailurepage";
+        }
+        else
+        {
+            ffSvc.savingUsers(usernameInput, passwordInput);
+            model.addAttribute("username", usernameInput);
+            return "signupsuccesspage";
+        }
     }
 
     @GetMapping(path = "/savedrecipes")
@@ -189,7 +196,6 @@ public class FoodFinderController {
             }
 
             else {
-
                 ArrayList<Food> foodlist = ffSvc.getSavedRecipes(username);
             // String savedRecipes = foodRepo.retrieveIt(username);
 

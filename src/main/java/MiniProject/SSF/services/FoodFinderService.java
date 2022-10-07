@@ -2,6 +2,7 @@ package MiniProject.SSF.services;
 
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import com.google.common.hash.Hashing;
 
 import MiniProject.SSF.models.Food;
 import MiniProject.SSF.repositories.FoodRepository;
@@ -40,11 +43,25 @@ public class FoodFinderService {
 
     public Food getFood(String input, String maxCalInput){
 
+        // Integer maxCalInputInteger = Integer.parseInt(maxCalInput);
+
+        // Integer minCalInputInteger = 0;
+
+        // if(maxCalInputInteger>999){
+        //     minCalInputInteger = maxCalInputInteger - 500;
+        // }
+
+        // else{minCalInputInteger = 0;}
+
+        // String minCalInput = minCalInputInteger.toString();
+        
+
         String url = UriComponentsBuilder.fromUriString(URL)
         .queryParam("cuisine", input)
         .queryParam("number", "10") //hardset to 10 due to API call limitss...
         //.queryParam("intolerances", "Shellfish")
         .queryParam("maxCalories", maxCalInput)
+        // .queryParam("minCalories", minCalInput)
         .queryParam("apiKey", key)
         .queryParam("instructionsRequired", "true")
         .queryParam("addRecipeInformation", "true")
@@ -115,6 +132,7 @@ public class FoodFinderService {
     //this method saves USERS
     public String savingUsers(String username, String password){
         username = username + "acct";
+        password = Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString();
         String something = foodRepo.saveIt(username, password);
 
         return something;
