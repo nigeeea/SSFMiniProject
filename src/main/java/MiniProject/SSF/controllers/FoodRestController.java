@@ -25,7 +25,7 @@ public class FoodRestController {
 
         if(foodRepo.retrieveIt(username).equals("nothing")){
             JsonObject errorMessage = Json.createObjectBuilder()
-                                        .add("error", "Username %s not found".formatted(username))
+                                        .add("error", "No recipes for user %s".formatted(username))
                                         .build();
                                         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                                         .body(errorMessage.toString());

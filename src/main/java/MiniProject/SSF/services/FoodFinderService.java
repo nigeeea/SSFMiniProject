@@ -27,9 +27,6 @@ import jakarta.json.JsonReader;
 
 @Service
 public class FoodFinderService {
-    
-    //Change from random recipe API to search recipe API and create drop-down list and parameters cause the random recipe one is too random
-    //Instance Variable: URL and apiKey
 
     private static final String URL = "https://api.spoonacular.com/recipes/complexSearch";
 
@@ -40,28 +37,12 @@ public class FoodFinderService {
     private FoodRepository foodRepo;
 
     //Method 1: return a list of object(food) - takes in a String "tag" e.g. chicken, fish, chocolate, vegetarian
-
     public Food getFood(String input, String maxCalInput){
-
-        // Integer maxCalInputInteger = Integer.parseInt(maxCalInput);
-
-        // Integer minCalInputInteger = 0;
-
-        // if(maxCalInputInteger>999){
-        //     minCalInputInteger = maxCalInputInteger - 500;
-        // }
-
-        // else{minCalInputInteger = 0;}
-
-        // String minCalInput = minCalInputInteger.toString();
-        
 
         String url = UriComponentsBuilder.fromUriString(URL)
         .queryParam("cuisine", input)
         .queryParam("number", "10") //hardset to 10 due to API call limitss...
-        //.queryParam("intolerances", "Shellfish")
         .queryParam("maxCalories", maxCalInput)
-        // .queryParam("minCalories", minCalInput)
         .queryParam("apiKey", key)
         .queryParam("instructionsRequired", "true")
         .queryParam("addRecipeInformation", "true")
@@ -74,7 +55,6 @@ public class FoodFinderService {
         RestTemplate template = new RestTemplate();
         ResponseEntity<String> resp = template.exchange(req, String.class);
 
-
         //Check the response
         System.out.println(resp.getStatusCodeValue());
         String payload = resp.getBody();
@@ -86,16 +66,12 @@ public class FoodFinderService {
         JsonObject initialJsonObject = myJsonReader.readObject();
         JsonArray initialJsonArray = initialJsonObject.getJsonArray("results");
 
-       
-
         //this method is to get a random recipe out of the results returned (can get from the size of the JSON Array)
         int randomNumber = (int)(Math.random() * initialJsonArray.size() + 1);
 
         //get the recipe calories
         JsonObject initialJsonCaloriesObject = initialJsonArray.getJsonObject(randomNumber).getJsonObject("nutrition");
         Integer recipeCalories = initialJsonCaloriesObject.getJsonArray("nutrients").getJsonObject(0).getInt("amount");
-        
-
 
         //create a new JsonObject to contain the information that i want
         JsonObjectBuilder myJsonObjectBuilder = Json.createObjectBuilder();
@@ -104,7 +80,6 @@ public class FoodFinderService {
         .add("image", initialJsonArray.getJsonObject(randomNumber).getString("image"))
         .add("recipeName", initialJsonArray.getJsonObject(randomNumber).getString("title"))
         .add("url", initialJsonArray.getJsonObject(randomNumber).getString("spoonacularSourceUrl"))
-        
         .add("calories", recipeCalories);
         
         JsonObject myJsonObject = myJsonObjectBuilder.build();
@@ -121,32 +96,30 @@ public class FoodFinderService {
         return myFood;
     }
 
-    //this method saves AND retrieves data to and from Redis
+    //method 2: this method saves AND retrieves data to and from Redis and returns a String - see foodrepo
     public String savingIt(String cuisine, String recipeNamez){
         String something = foodRepo.saveIt(cuisine, recipeNamez);
 
         return something;
-        
     }
 
-    //this method saves USERS
+    //method 3: this method saves users during sign up and encrypts passwords with a sha256 function 
     public String savingUsers(String username, String password){
         username = username + "acct";
         password = Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString();
         String something = foodRepo.saveIt(username, password);
 
-        return something;
-        
+        return something;    
     }
 
-    //this method to retrieve from Redis using Key
+    //method 4: this method to retrieve from Redis using key - see foodrepo
     public String retrieveValue(String key){
         String value = foodRepo.retrieveIt(key);
         return value;
     }
 
 
-    //method from Json to food
+    //method 5: method to convert from Json to food
     public Food JsontoFoodObject(JsonObject recipe){
         Food newFood = new Food();
         newFood.setCalories(recipe.getInt("calories"));
@@ -158,13 +131,13 @@ public class FoodFinderService {
         return newFood;
     }
 
-    //method to save recipes
+    //method 6: method to save recipes
     public void saveRecipe(String username, Integer id, String recipeName, String image, String url, Integer calories){
 
         //if jsonarray for saved recipes has not been created and is null
         if(foodRepo.retrieveIt(username).equals("nothing")){
 
-            //create a food jsonarray and store it in redis
+        //create a food jsonarray and store it in redis
         JsonArrayBuilder myJsonArrayBuilder = Json.createArrayBuilder();
         JsonObjectBuilder jsonOB1 = Json.createObjectBuilder()
         .add("recipename", recipeName)
@@ -177,7 +150,7 @@ public class FoodFinderService {
         savingIt(username, finalJsonArray.toString());
         }
 
-    //else if created already, add on to the array
+        //else if created already, add on to the array
         else{
 
             //retrieve the already saved recipes
@@ -214,10 +187,9 @@ public class FoodFinderService {
 
     }
 
-    //method to get saved recipes
+    //method 7: method to get saved recipes
     public ArrayList<Food> getSavedRecipes(String username){
 
-        
         String savedRecipes = foodRepo.retrieveIt(username);
 
         //Turn the saved json array into an array and add the new json object into the array and save it

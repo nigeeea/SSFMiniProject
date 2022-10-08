@@ -28,8 +28,6 @@ public class FoodFinderController {
 
     @Autowired FoodRepository foodRepo;
 
-
-    //might want to edit this part to ensure the path name
     @GetMapping(path = "/loginpage")
     public String displayLoginPage()
     {
@@ -77,7 +75,6 @@ public class FoodFinderController {
         model.addAttribute("hiddenurl",myFood.getUrl());
         
         return "displayrecipe";
-
     }
 
     @PostMapping(path = "/savedpage")
@@ -92,56 +89,6 @@ public class FoodFinderController {
     )
     {   
         ffSvc.saveRecipe(username, id, recipename, image, url, calories);
-    // //if jsonarray for saved recipes has not been created and is null
-    //     if(foodRepo.retrieveIt(username).equals("nothing")){
-
-    //         //create a food jsonarray and store it in redis
-    //     JsonArrayBuilder myJsonArrayBuilder = Json.createArrayBuilder();
-    //     JsonObjectBuilder jsonOB1 = Json.createObjectBuilder()
-    //     .add("recipename", recipename)
-    //     .add("id", id)
-    //     .add("image", image)
-    //     .add("calories", calories)
-    //     .add("url", url);
-    //     JsonObject jsonObject1 = jsonOB1.build();
-    //     JsonArray finalJsonArray = myJsonArrayBuilder.add(jsonObject1).build();
-    //     ffSvc.savingIt(username, finalJsonArray.toString());
-    //     }
-
-    // //else if created already, add on to the array
-    //     else{
-
-    //         //retrieve the already saved recipes
-    //         String prevSavedRecipes = foodRepo.retrieveIt(username);
-
-    //         //create the recipe to be saved in json object format and save to string
-    //         JsonObjectBuilder jsonOB1 = Json.createObjectBuilder()
-    //         .add("recipename", recipename)
-    //         .add("id", id)
-    //         .add("image", image)
-    //         .add("calories", calories)
-    //         .add("url", url);
-
-    //         JsonObject jsonObject1 = jsonOB1.build();
-
-    //         //Turn the saved json array into an array and add the new json object into the array and save it
-    //         Reader myStringReader = new StringReader(prevSavedRecipes);
-    //         JsonReader myJsonReader = Json.createReader(myStringReader);
-    //         JsonArray prevSavedJsonArray = myJsonReader.readArray();
-
-    //         JsonArrayBuilder finalJsonArrayBuilder = Json.createArrayBuilder();
-
-    //         for(int i=0; i<prevSavedJsonArray.size(); i++){
-    //             finalJsonArrayBuilder.add(prevSavedJsonArray.get(i));
-    //         }
-
-            
-
-    //         String finalJsonArrayToSave = finalJsonArrayBuilder.add(jsonObject1).build().toString();  
-    //         //String finalJsonToSave = prevSavedRecipes + "," + jsonObject1.toString();
-
-    //         foodRepo.justSavingIt(username, finalJsonArrayToSave);
-    //     }
 
         model.addAttribute("id",id);
         model.addAttribute("recipename",recipename);
@@ -161,7 +108,6 @@ public class FoodFinderController {
         return "searchrecipe";
     }
 
-
     @GetMapping(path = "/signuppage")
     public String displaySignUpPage(){
         return "signuppage";
@@ -172,7 +118,8 @@ public class FoodFinderController {
         @RequestParam(name = "username") String usernameInput,
         @RequestParam(name = "password") String passwordInput,
         Model model
-    ){
+    )
+    {
         if(foodRepo.retrieveIt(usernameInput)!="nothing"){
             return "signupfailurepage";
         }
@@ -187,8 +134,9 @@ public class FoodFinderController {
     @GetMapping(path = "/savedrecipes")
     public String savedrecipes(
         @RequestParam(name = "username") String username,
-        Model model)
-        {
+        Model model
+    )
+    {
             model.addAttribute("username", username);
 
             if(foodRepo.retrieveIt(username).equals("nothing")){
@@ -197,35 +145,9 @@ public class FoodFinderController {
 
             else {
                 ArrayList<Food> foodlist = ffSvc.getSavedRecipes(username);
-            // String savedRecipes = foodRepo.retrieveIt(username);
 
-            // //Turn the saved json array into an array and add the new json object into the array and save it
-            // Reader myStringReader = new StringReader(savedRecipes);
-            // JsonReader myJsonReader = Json.createReader(myStringReader);
-            // JsonArray prevSavedJsonArray = myJsonReader.readArray();
-
-            // JsonArrayBuilder finalJsonArrayBuilder = Json.createArrayBuilder();
-
-            // for(int i=0; i<prevSavedJsonArray.size(); i++){
-            //     finalJsonArrayBuilder.add(prevSavedJsonArray.get(i));
-            // }
-
-            // JsonArray savedRecipesArray = finalJsonArrayBuilder.build();
-
-            // //convert each object int the array into a food object and add it to a "Food" list
-            // List<Food> foodlist = new ArrayList<>();
-            
-            // for(int i=0; i<savedRecipesArray.size(); i++){
-            //     JsonObject recipeObject = savedRecipesArray.getJsonObject(i);
-            //     foodlist.add(ffSvc.JsontoFoodObject(recipeObject));
-                
-            // }
-
-            model.addAttribute("foodlist", foodlist);
-
-            //display all saved objects in html through thymeleaf iteration
-
-            return "savedrecipes";
+                model.addAttribute("foodlist", foodlist);
+                return "savedrecipes";
         }
     }
 
