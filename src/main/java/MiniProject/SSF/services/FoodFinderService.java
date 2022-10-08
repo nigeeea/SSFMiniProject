@@ -41,7 +41,7 @@ public class FoodFinderService {
 
         String url = UriComponentsBuilder.fromUriString(URL)
         .queryParam("cuisine", input)
-        .queryParam("number", "10") //hardset to 10 due to API call limitss...
+        .queryParam("number", "7") //hardset to 10 due to API call limitss...
         .queryParam("maxCalories", maxCalInput)
         .queryParam("apiKey", key)
         .queryParam("instructionsRequired", "true")

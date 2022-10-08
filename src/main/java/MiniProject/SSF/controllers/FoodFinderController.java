@@ -53,8 +53,8 @@ public class FoodFinderController {
 
     @GetMapping(path = "/displayrecipe")
     public String displayRandomRecipe(
-        @RequestParam(name = "userInput", defaultValue = "chinese") String input,
-        @RequestParam(name = "maxCalorieInput", defaultValue = "800") String maxCalInput,
+        @RequestParam(name = "userInput", defaultValue = "italian") String input,
+        @RequestParam(name = "maxCalorieInput", defaultValue = "1000") String maxCalInput,
         @RequestParam(name = "username") String username,
         Model model
     )
