@@ -42,4 +42,17 @@ public class FoodRepository {
         ValueOperations<String,Object> ops = redisTemplate.opsForValue();
         ops.set(key, value);
     }
+
+    //method 4: existing username in database
+    public String matchPassword(String key){
+        ValueOperations<String,Object> ops = redisTemplate.opsForValue();
+        String valueRetrieved = "";
+        if(null == ops.get(key)){
+            valueRetrieved = "nothing";
+        }
+        else{
+            valueRetrieved = ops.get(key).toString();
+        }
+        return valueRetrieved;
+    }
 }

@@ -120,15 +120,16 @@ public class FoodFinderController {
         Model model
     )
     {
-        if(foodRepo.retrieveIt(usernameInput)!="nothing"){
-            return "signupfailurepage";
-        }
-        else
-        {
-            ffSvc.savingUsers(usernameInput, passwordInput);
-            model.addAttribute("username", usernameInput);
-            return "signupsuccesspage";
-        }
+       if(foodRepo.retrieveIt(usernameInput+"acct").equals("nothing")){
+        ffSvc.savingUsers(usernameInput, passwordInput);
+        model.addAttribute("username", usernameInput);
+
+        return "signupsuccesspage";
+       } 
+
+       else{
+        return "signupfailurepage";
+       }
     }
 
     @GetMapping(path = "/savedrecipes")
@@ -138,7 +139,7 @@ public class FoodFinderController {
     )
     {
             model.addAttribute("username", username);
-
+            
             if(foodRepo.retrieveIt(username).equals("nothing")){
                 return "emptysavedrecipes";
             }

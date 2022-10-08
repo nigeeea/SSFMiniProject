@@ -28,34 +28,36 @@
 <body>
   
     <div class="container-fluid bg-1 text-left">
+
       <div class="row">
-      <div class="col-md-1">
+        <div class="col-md-1">
         <h1 class="text-left"> <img src="images/FFFFLogo3.png" height="100"></h1>
-      </div>
-      <div class="col-md-8">
+        </div>
+      
+        <div class="col-md-8">
         <br>
         <h1><span data-th-text="${username}"></span>'s saved recipes</h1>
-      </div>
-      <div class="col-md-1">
-      </div>
-      <div class="col-md-1">
+        </div>
+
+        <div class="col-md-1"></div>
+      
+        <div class="col-md-1">
         <br>
         <br>
         <form action="/searchrecipe">
           <input type="hidden" name="username" data-th-value="${username}">
           <input type="submit" value="search again" class="btn btn-secondary btn-sm" style="color: whitesmoke;">
         </form>
-      </div>
-      <div class="col-md-1">
+        </div>
+
+        <div class="col-md-1">
         <br>
         <br>
         <form action="/" method="GET">
           <input type="submit" value="logout" class="btn btn-secondary btn-sm" style="color: whitesmoke;">
-      </form>
-      </div>
-      
-    </div>    
-    
+        </form>
+        </div>
+      </div>    
 
     <div class="container-fluid bg-2" >
       
